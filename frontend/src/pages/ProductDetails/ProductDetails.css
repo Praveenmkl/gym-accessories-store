@@ -1,0 +1,157 @@
+/* ── Wrapper ─────────────────────────────────────── */
+.product-details {
+  display: flex;
+  gap: 64px;
+  padding: 72px 100px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #1a1a1a;
+}
+
+/* ── Image ───────────────────────────────────────── */
+.product-image {
+  flex: 0 0 480px;
+}
+
+.product-image img {
+  width: 80%;
+  height: auto;
+  object-fit: cover;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.13);
+  display: block;
+}
+
+/* ── Info panel ──────────────────────────────────── */
+.product-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* ── Title ───────────────────────────────────────── */
+.product-info h2 {
+  font-size: 34px;
+  font-weight: 500;
+  letter-spacing: -0.6px;
+  line-height: 1.2;
+  margin: 0;
+  color: #111;
+}
+
+/* ── Divider ─────────────────────────────────────── */
+.product-divider {
+  border: none;
+  border-top: 1px solid #e8e8e8;
+  margin: 0;
+}
+
+/* ── Price ───────────────────────────────────────── */
+.price {
+  font-size: 32px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+/* ── Description ─────────────────────────────────── */
+.description {
+  font-size: 15px;
+  color: #666;
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* ── Quantity ────────────────────────────────────── */
+.qty-label {
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  color: #666;
+  margin: 0;
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  border: 1.5px solid #e0e0e0;
+  overflow: hidden;
+}
+
+.quantity-selector button {
+  width: 46px;
+  height: 46px;
+  font-size: 20px;
+  font-weight: 400;
+  background: #fafafa;
+  border: none;
+  cursor: pointer;
+  color: #1a1a1a;
+  transition: background 0.15s;
+}
+
+.quantity-selector button:hover {
+  background: #f0f0f0;
+}
+
+.quantity-selector span {
+  width: 56px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 500;
+  border-left: 1.5px solid #e0e0e0;
+  border-right: 1.5px solid #e0e0e0;
+  padding: 10px 0;
+  color: #111;
+}
+
+/* ── Action button ───────────────────────────────── */
+.add-to-cart {
+  padding: 15px 40px;
+  font-size: 15px;
+  font-weight: 400;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  border: none;
+  background-color: #000000;
+  color: #fff;
+  align-self: flex-start;
+}
+
+
+/* ── Trust badges ────────────────────────────────── */
+.product-trust {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: #777;
+}
+
+/* ── Responsive ──────────────────────────────────── */
+@media screen and (max-width: 900px) {
+  .product-details {
+    flex-direction: column;
+    padding: 36px 20px;
+    gap: 32px;
+  }
+
+  .product-image {
+    flex: unset;
+  }
+
+  .product-image img {
+    height: auto;
+    max-height: 400px;
+  }
+
+  .add-to-cart {
+    align-self: stretch;
+    text-align: center;
+  }
+}
+
