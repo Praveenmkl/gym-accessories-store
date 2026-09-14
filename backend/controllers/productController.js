@@ -3,7 +3,25 @@ import Product from "../models/Product.js";
 // Get all products
 export const getAllProducts = async (req, res) => {
     try {
-        const products = await Product.find();
+        const { search, category, minPrice, maxPrice, inStock } = req.query;
+        let query = {};
+
+        if (search) {
+            query.name = { $regex: search, $options: "i" };
+        }
+        if (category && category !== "All") {
+            query.category = category;
+        }
+        if (minPrice || maxPrice) {
+            query.price = {};
+            if (minPrice) query.price.$gte = Number(minPrice);
+            if (maxPrice) query.price.$lte = Number(maxPrice);
+        }
+        if (inStock === "true") {
+            query.quantity = { $gt: 0 };
+        }
+
+        const products = await Product.find(query);
         
         if (products.length === 0) {
             return res.status(200).json({
@@ -45,7 +63,7 @@ export const getProductById = async (req, res) => {
 // Create product (admin only)
 export const createProduct = async (req, res) => {
     try {
-        const { name, price, quantity, image, description } = req.body;
+        const { name, price, quantity, image, description, category } = req.body;
         
         if (!name || !price) {
             return res.status(400).json({ msg: "Name and price are required" });
@@ -65,6 +83,7 @@ export const createProduct = async (req, res) => {
         const product = await Product.create({
             name,
             price: parsedPrice,
+            category: category || "General",
             quantity: parsedQuantity,
             image,
             description
@@ -84,7 +103,7 @@ export const createProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, price, quantity, image, description } = req.body;
+        const { name, price, quantity, image, description, category } = req.body;
 
         const updateData = {};
 
@@ -117,6 +136,10 @@ export const updateProduct = async (req, res) => {
 
         if (typeof description !== "undefined") {
             updateData.description = description;
+        }
+
+        if (typeof category !== "undefined") {
+            updateData.category = category;
         }
 
         const product = await Product.findByIdAndUpdate(id, updateData, {

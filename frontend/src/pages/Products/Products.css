@@ -1,27 +1,140 @@
 .shop-container{
     padding: 40px;
-}
-
-.product-grid{
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    gap: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .shop-container h1 {
     text-align: center;
     margin: 0 0 8px;
-    font-size: 20px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: #000000;
+    color: #1a1a1a;
 }
 
 .shop-subtitle {
     text-align: center;
-    margin: 0 0 28px;
-    font-size: 14px;
+    margin: 0 0 32px;
+    font-size: 15px;
     line-height: 1.6;
-    color: #4b5563;
+    color: #6b7280;
+}
+
+.shop-layout {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.filters-sidebar {
+    flex: 0 0 250px;
+    background: #f9fafb;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.filters-sidebar h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #111827;
+}
+
+.filter-group {
+    margin-bottom: 20px;
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.filter-group input[type="text"],
+.filter-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+.filter-group.price-range .price-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-group.price-range input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-group label {
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+.checkbox-group input {
+    cursor: pointer;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.filter-actions button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.btn-apply {
+    background-color: #000;
+    color: #fff;
+}
+.btn-apply:hover {
+    background-color: #333;
+}
+
+.btn-reset {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+.btn-reset:hover {
+    background-color: #d1d5db;
+}
+
+
+.product-grid{
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.error-msg {
+    color: #ef4444;
 }
