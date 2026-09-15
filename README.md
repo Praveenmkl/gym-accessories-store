@@ -6,9 +6,9 @@ A full-stack MERN e-commerce application featuring a customer storefront, an adm
 
 ## 🌐 1. Live Deployment Links
 
-- **Customer Storefront**: [https://gym-accessories-store-frontend.vercel.app/](https://gym-accessories-store-frontend.vercel.app/) *(or your deployed frontend URL)*
-- **Admin Dashboard**: [https://gym-accessories-store-admin.vercel.app/](https://gym-accessories-store-admin.vercel.app/) *(or your deployed admin URL)*
-- **Backend API**: [https://gym-accessories-store-backend.vercel.app/](https://gym-accessories-store-backend.vercel.app/) *(or your deployed backend URL)*
+- **Customer Storefront**: [https://gym-accessories-store-frontend.vercel.app/](https://gym-accessories-store-ie4ncdj7u-praveen-kalansooriyas-projects.vercel.app/) *(or your deployed frontend URL)*
+- **Admin Dashboard**: [https://gym-accessories-store-admin.vercel.app/](https://gym-accessories-store-admin-hmkkwelyh.vercel.app/) *(or your deployed admin URL)*
+- **Backend API**: [https://gym-accessories-store-backend.vercel.app/]([https://gym-accessories-store-backend.vercel.app/](https://gym-accessories-store-api.vercel.app/) *(or your deployed backend URL)*
 - **GitHub Repository**: [https://github.com/Praveenmkl/gym-accessories-store](https://github.com/Praveenmkl/gym-accessories-store)
 
 ---
