@@ -72,6 +72,7 @@ export const createOrder = async (req, res) => {
       return res.status(400).json({ msg: "Provided total does not match item totals" });
     }
 
+    // Reserve stock atomically for each item
     for (const item of normalizedItems) {
       const updatedProduct = await Product.findOneAndUpdate(
         { _id: item.productId, quantity: { $gte: item.quantity } },
@@ -80,6 +81,7 @@ export const createOrder = async (req, res) => {
       );
 
       if (!updatedProduct) {
+        // Rollback already decremented products
         for (const prev of decrementedProducts) {
           await Product.findByIdAndUpdate(prev.productId, {
             $inc: { quantity: prev.quantity },
@@ -87,7 +89,7 @@ export const createOrder = async (req, res) => {
         }
 
         return res.status(400).json({
-          msg: `Insufficient stock for ${item.name}`,
+          msg: `Insufficient stock for "${item.name}". Only remaining items are available.`,
         });
       }
 
@@ -105,7 +107,11 @@ export const createOrder = async (req, res) => {
       city: String(customer.city).trim(),
     });
 
+    const selectedPaymentMethod = String(paymentMethod || "Mock Card").trim();
+    const initialStatus = selectedPaymentMethod === "COD" ? "confirmed" : "pending";
+
     const order = await Order.create({
+      userId,
       customer: {
         name: String(customer.name).trim(),
         phone: String(customer.phone).trim(),
@@ -115,7 +121,8 @@ export const createOrder = async (req, res) => {
       shippingDetailId: shippingDetail._id,
       items: normalizedItems,
       total: bodyTotal,
-      paymentMethod: String(paymentMethod || "COD").trim() || "COD",
+      paymentMethod: selectedPaymentMethod,
+      status: initialStatus,
     });
 
     return res.status(201).json({
@@ -134,5 +141,97 @@ export const createOrder = async (req, res) => {
 
     console.error("Error creating order:", error);
     return res.status(500).json({ msg: "Server error while creating order" });
+  }
+};
+
+export const processPayment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const order = await Order.findById(id);
+    
+    if (!order) {
+      return res.status(404).json({ msg: "Order not found" });
+    }
+
+    if (order.status === "confirmed") {
+      return res.status(200).json({ msg: "Order is already confirmed", order });
+    }
+
+    if (order.status !== "pending") {
+      return res.status(400).json({ msg: `Order cannot be paid. Current status: ${order.status}` });
+    }
+
+    // Simulate payment processing delay (800ms)
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
+    // Confirm mock payment successfully
+    order.status = "confirmed";
+    await order.save();
+
+    return res.status(200).json({ msg: "Payment successful! Your order has been placed.", order });
+  } catch (error) {
+    console.error("Error processing payment:", error);
+    return res.status(500).json({ msg: "Server error while processing payment" });
+  }
+};
+
+export const getUserOrders = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ msg: "Unauthorized" });
+    }
+
+    const shippingDetails = await ShippingDetail.find({ userId });
+    const shippingIds = shippingDetails.map((sd) => sd._id);
+
+    const orders = await Order.find({
+      $or: [
+        { userId },
+        { shippingDetailId: { $in: shippingIds } },
+      ],
+    })
+      .populate("shippingDetailId")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({ msg: "Orders retrieved", orders });
+  } catch (error) {
+    console.error("Error fetching user orders:", error);
+    return res.status(500).json({ msg: "Server error while fetching orders" });
+  }
+};
+
+export const cancelOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const order = await Order.findById(id);
+    if (!order) {
+      return res.status(404).json({ msg: "Order not found" });
+    }
+
+    if (order.status === "cancelled") {
+      return res.status(400).json({ msg: "Order is already cancelled" });
+    }
+
+    if (order.status === "delivered") {
+      return res.status(400).json({ msg: "Cannot cancel a delivered order" });
+    }
+
+    order.status = "cancelled";
+    await order.save();
+
+    // Restore stock
+    for (const item of order.items) {
+      await Product.findByIdAndUpdate(item.productId, {
+        $inc: { quantity: item.quantity },
+      });
+    }
+
+    return res.status(200).json({ msg: "Order cancelled successfully. Stock has been restored.", order });
+  } catch (error) {
+    console.error("Error cancelling order:", error);
+    return res.status(500).json({ msg: "Server error while cancelling order" });
   }
 };

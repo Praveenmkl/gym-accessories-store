@@ -14,26 +14,50 @@ const readInitialCart = () => {
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(readInitialCart);
+  const [toastNotification, setToastNotification] = useState(null);
 
   useEffect(() => {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
   }, [cartItems]);
 
+  const showNotification = (notification) => {
+    setToastNotification({ show: true, ...notification });
+    if (window._toastTimeout) clearTimeout(window._toastTimeout);
+    window._toastTimeout = setTimeout(() => {
+      setToastNotification(null);
+    }, 4000);
+  };
+
+  const hideNotification = () => {
+    if (window._toastTimeout) clearTimeout(window._toastTimeout);
+    setToastNotification(null);
+  };
+
   const addToCart = (product, quantity = 1) => {
     // Validate quantity against available stock
     const availableStock = product.quantity || 0;
     if (quantity > availableStock) {
-      alert(`Only ${availableStock} items available in stock`);
-      return;
+      showNotification({
+        type: 'error',
+        message: `Only ${availableStock} items available in stock.`,
+        product,
+      });
+      return false;
     }
 
+    let success = true;
     setCartItems((currentItems) => {
       const existingItem = currentItems.find((item) => item.id === product.id);
       const totalQuantity = (existingItem?.quantity || 0) + quantity;
 
       // Check if total would exceed stock
       if (totalQuantity > availableStock) {
-        alert(`Cannot add more than ${availableStock} items. Already have ${existingItem?.quantity || 0} in cart.`);
+        showNotification({
+          type: 'error',
+          message: `Cannot add more. You already have ${existingItem?.quantity || 0} in cart (Stock: ${availableStock}).`,
+          product,
+        });
+        success = false;
         return currentItems;
       }
 
@@ -47,6 +71,16 @@ export const CartProvider = ({ children }) => {
 
       return [...currentItems, { ...product, quantity }];
     });
+
+    if (success) {
+      showNotification({
+        type: 'success',
+        message: `${product.name} added to your cart`,
+        product,
+        quantity,
+      });
+    }
+    return success;
   };
 
   const removeFromCart = (productId) => {
@@ -104,6 +138,8 @@ export const CartProvider = ({ children }) => {
     increaseQuantity,
     decreaseQuantity,
     clearCart,
+    toastNotification,
+    hideNotification,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

@@ -13,6 +13,9 @@ import Footer from './components/Footer/Footer'
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import OrderHistory from './pages/OrderHistory/OrderHistory';
+
+import Toast from './components/Toast/Toast';
 
 const AppLayout = () => {
   const location = useLocation();
@@ -21,6 +24,7 @@ const AppLayout = () => {
   return (
     <>
       <Navbar/>
+      <Toast />
 
       <Routes>
         <Route path='/' element={<Home />} />
@@ -31,6 +35,7 @@ const AppLayout = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/success' element={<Success />} />
+        <Route path='/myorders' element={<ProtectedRoute><OrderHistory /></ProtectedRoute>} />
       </Routes>
 
       {!hideFooter && <Footer/>}

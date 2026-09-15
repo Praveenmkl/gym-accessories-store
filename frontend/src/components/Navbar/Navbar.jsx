@@ -22,6 +22,7 @@ const Navbar = () => {
             <FiUser aria-hidden='true' />
             {isAuthenticated ? (
               <>
+                <Link to='/myorders' className='navbar-link'>My Orders</Link>
                 <span className='auth-user'>Hi, {user.name}</span>
                 <button type='button' onClick={logout} className='auth-button'>Logout</button>
               </>

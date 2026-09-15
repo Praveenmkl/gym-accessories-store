@@ -20,6 +20,8 @@ export const protect = (req, res, next) => {
     }
 };
 
+export const authMiddleware = protect;
+
 export const adminOnly = async (req, res, next) => {
     try {
         const user = await User.findById(req.user?.id).select("role");

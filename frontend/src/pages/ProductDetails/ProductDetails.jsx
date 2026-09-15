@@ -45,12 +45,7 @@ const ProductDetails = () => {
   const imageSrc = (product.image || '').trim() || FALLBACK_IMAGE;
 
   const handleAddToCart = () => {
-    if (quantity > product.quantity) {
-      alert(`Only ${product.quantity} items available in stock`);
-      return;
-    }
     addToCart({ ...product, id: product._id || product.id }, quantity);
-    navigate('/cart');
   };
 
   return (

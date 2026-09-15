@@ -1,38 +1,61 @@
 import Product from "../models/Product.js";
 
-// Get all products
+// Get all products with advanced filters
 export const getAllProducts = async (req, res) => {
     try {
-        const { search, category, minPrice, maxPrice, inStock } = req.query;
+        const { search, category, minPrice, maxPrice, inStock, sort } = req.query;
         let query = {};
 
-        if (search) {
-            query.name = { $regex: search, $options: "i" };
+        // Multi-field search (name, description, category)
+        if (search && search.trim()) {
+            const searchRegex = { $regex: search.trim(), $options: "i" };
+            query.$or = [
+                { name: searchRegex },
+                { description: searchRegex },
+                { category: searchRegex }
+            ];
         }
-        if (category && category !== "All") {
-            query.category = category;
+
+        // Case-insensitive category match
+        if (category && category !== "All" && category.trim()) {
+            query.category = { $regex: new RegExp(`^${category.trim()}$`, "i") };
         }
-        if (minPrice || maxPrice) {
+
+        // Price range filtering
+        if ((minPrice !== undefined && minPrice !== "") || (maxPrice !== undefined && maxPrice !== "")) {
             query.price = {};
-            if (minPrice) query.price.$gte = Number(minPrice);
-            if (maxPrice) query.price.$lte = Number(maxPrice);
+            if (minPrice !== undefined && minPrice !== "" && !isNaN(Number(minPrice))) {
+                query.price.$gte = Number(minPrice);
+            }
+            if (maxPrice !== undefined && maxPrice !== "" && !isNaN(Number(maxPrice))) {
+                query.price.$lte = Number(maxPrice);
+            }
+            if (Object.keys(query.price).length === 0) {
+                delete query.price;
+            }
         }
-        if (inStock === "true") {
+
+        // In-stock filtering
+        if (inStock === "true" || inStock === true) {
             query.quantity = { $gt: 0 };
         }
 
-        const products = await Product.find(query);
-        
-        if (products.length === 0) {
-            return res.status(200).json({
-                msg: "No products found",
-                products: []
-            });
-        }
+        // Sorting
+        let sortOption = { _id: -1 };
+        if (sort === "price-asc") sortOption = { price: 1 };
+        else if (sort === "price-desc") sortOption = { price: -1 };
+        else if (sort === "name-asc") sortOption = { name: 1 };
+        else if (sort === "name-desc") sortOption = { name: -1 };
+
+        const [products, distinctCategories] = await Promise.all([
+            Product.find(query).sort(sortOption),
+            Product.distinct("category")
+        ]);
         
         res.status(200).json({
             msg: "Products retrieved successfully",
-            products
+            products: products || [],
+            categories: distinctCategories || []
         });
     } catch (error) {
         console.error("Error fetching products:", error);
