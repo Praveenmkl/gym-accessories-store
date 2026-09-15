@@ -6,10 +6,12 @@ const AuthContext = createContext();
 
 const USER_STORAGE_KEY = "user";
 const TOKEN_STORAGE_KEY = "token";
-const API_BASE_URL =
-    import.meta.env.VITE_API_URL ||
-    import.meta.env.API_URL ||
-    (import.meta.env.DEV ? "/api" : "/api");
+const rawAuthBase = import.meta.env.VITE_API_URL || import.meta.env.API_URL || '/api';
+const cleanAuthBase = String(rawAuthBase).trim().replace(/\/+$/, '');
+const API_BASE_URL = cleanAuthBase === '/api' || cleanAuthBase.endsWith('/api')
+    ? cleanAuthBase
+    : `${cleanAuthBase}/api`;
+
 
 const parseJSON = (value, fallback) => {
     try {
