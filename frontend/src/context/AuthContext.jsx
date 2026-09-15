@@ -6,9 +6,7 @@ const AuthContext = createContext();
 
 const USER_STORAGE_KEY = "user";
 const TOKEN_STORAGE_KEY = "token";
-const API_BASE_URL =
-    import.meta.env.VITE_API_URL ||
-    (import.meta.env.DEV ? "/api" : "http://localhost:5000/api");
+const API_BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
 const parseJSON = (value, fallback) => {
     try {
