@@ -1,52 +1,96 @@
 .success-page {
-    min-height: calc(100vh - 140px);
-    display: grid;
-    place-items: center;
-    padding: 40px 16px;
-    font-family: Arial, sans-serif;
+  min-height: calc(100vh - 140px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  background-color: #fcfcfc;
 }
 
 .success-card {
-    width: min(560px, 100%);
-    border: 1px solid #ddd;
-    background: #fff;
-    padding: 32px 24px;
-    text-align: center;
+  width: min(600px, 100%);
+  border: 1px solid #e5e5e5;
+  background: #ffffff;
+  padding: 40px 32px;
+  text-align: center;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
 }
 
-
-.success-card img {
-    width: 80px;
-    display: block;
-    margin: 0 auto;
-    margin-bottom: 10px;
-
+.success-icon-wrapper {
+  margin-bottom: 16px;
 }
 
-.success-card h2 {
-    margin: 0 0 12px;
-    letter-spacing: 0.5px;
-    font-size: 28px;
-    font-weight: 700;
+.success-title {
+  margin: 0 0 8px;
+  letter-spacing: -0.5px;
+  font-size: 26px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #111827;
 }
 
-.success-card p {
-    margin: 0;
-    color: #555;
-    font-size: 16px;
+.success-subtitle {
+  margin: 0 0 24px;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
-@media (max-width: 768px) {
-    .success-page {
-        min-height: auto;
-        padding: 24px 12px;
-    }
+.order-badge {
+  display: inline-block;
+  background: #f3f4f6;
+  border: 1px dashed #d1d5db;
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 24px;
+}
 
-    .success-card {
-        padding: 24px 16px;
-    }
+.order-details-box {
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+  padding: 16px 20px;
+  text-align: left;
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
-    .success-card h2 {
-        font-size: 22px;
-    }
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.detail-label {
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.detail-val {
+  color: #111827;
+  text-align: right;
+}
+
+.total-item {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 8px;
+  margin-top: 4px;
+  color: #111827;
+  font-size: 14px;
+}
+
+.success-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+}
+
+@media (min-width: 640px) {
+  .success-actions {
+    flex-direction: row;
+  }
 }

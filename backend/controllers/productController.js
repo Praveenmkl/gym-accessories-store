@@ -1,20 +1,61 @@
 import Product from "../models/Product.js";
 
-// Get all products
+// Get all products with advanced filters
 export const getAllProducts = async (req, res) => {
     try {
-        const products = await Product.find();
-        
-        if (products.length === 0) {
-            return res.status(200).json({
-                msg: "No products found",
-                products: []
-            });
+        const { search, category, minPrice, maxPrice, inStock, sort } = req.query;
+        let query = {};
+
+        // Multi-field search (name, description, category)
+        if (search && search.trim()) {
+            const searchRegex = { $regex: search.trim(), $options: "i" };
+            query.$or = [
+                { name: searchRegex },
+                { description: searchRegex },
+                { category: searchRegex }
+            ];
         }
+
+        // Case-insensitive category match
+        if (category && category !== "All" && category.trim()) {
+            query.category = { $regex: new RegExp(`^${category.trim()}$`, "i") };
+        }
+
+        // Price range filtering
+        if ((minPrice !== undefined && minPrice !== "") || (maxPrice !== undefined && maxPrice !== "")) {
+            query.price = {};
+            if (minPrice !== undefined && minPrice !== "" && !isNaN(Number(minPrice))) {
+                query.price.$gte = Number(minPrice);
+            }
+            if (maxPrice !== undefined && maxPrice !== "" && !isNaN(Number(maxPrice))) {
+                query.price.$lte = Number(maxPrice);
+            }
+            if (Object.keys(query.price).length === 0) {
+                delete query.price;
+            }
+        }
+
+        // In-stock filtering
+        if (inStock === "true" || inStock === true) {
+            query.quantity = { $gt: 0 };
+        }
+
+        // Sorting
+        let sortOption = { _id: -1 };
+        if (sort === "price-asc") sortOption = { price: 1 };
+        else if (sort === "price-desc") sortOption = { price: -1 };
+        else if (sort === "name-asc") sortOption = { name: 1 };
+        else if (sort === "name-desc") sortOption = { name: -1 };
+
+        const [products, distinctCategories] = await Promise.all([
+            Product.find(query).sort(sortOption),
+            Product.distinct("category")
+        ]);
         
         res.status(200).json({
             msg: "Products retrieved successfully",
-            products
+            products: products || [],
+            categories: distinctCategories || []
         });
     } catch (error) {
         console.error("Error fetching products:", error);
@@ -45,7 +86,7 @@ export const getProductById = async (req, res) => {
 // Create product (admin only)
 export const createProduct = async (req, res) => {
     try {
-        const { name, price, quantity, image, description } = req.body;
+        const { name, price, quantity, image, description, category } = req.body;
         
         if (!name || !price) {
             return res.status(400).json({ msg: "Name and price are required" });
@@ -65,6 +106,7 @@ export const createProduct = async (req, res) => {
         const product = await Product.create({
             name,
             price: parsedPrice,
+            category: category || "General",
             quantity: parsedQuantity,
             image,
             description
@@ -84,7 +126,7 @@ export const createProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, price, quantity, image, description } = req.body;
+        const { name, price, quantity, image, description, category } = req.body;
 
         const updateData = {};
 
@@ -117,6 +159,10 @@ export const updateProduct = async (req, res) => {
 
         if (typeof description !== "undefined") {
             updateData.description = description;
+        }
+
+        if (typeof category !== "undefined") {
+            updateData.category = category;
         }
 
         const product = await Product.findByIdAndUpdate(id, updateData, {
