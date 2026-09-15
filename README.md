@@ -1,47 +1,49 @@
 # 🏋️ PowerFit – Gym & Fitness Accessories E-Commerce System
 
-A full-stack MERN e-commerce application featuring a customer storefront, an administrative management dashboard, and a secure REST API with real-time stock management and order processing.
+A full-stack MERN e-commerce application featuring a customer storefront, an administrative management dashboard, and a secure REST API with real-time inventory management and order processing.
 
 ---
 
 ## 🌐 1. Live Deployment Links
 
-- **Customer Storefront**: [https://gym-accessories-store-frontend.vercel.app/](https://gym-accessories-store-ie4ncdj7u-praveen-kalansooriyas-projects.vercel.app/) *(or your deployed frontend URL)*
-- **Admin Dashboard**: [https://gym-accessories-store-admin.vercel.app/](https://gym-accessories-store-admin-hmkkwelyh.vercel.app/) *(or your deployed admin URL)*
-- **Backend API**: [https://gym-accessories-store-backend.vercel.app/]([https://gym-accessories-store-backend.vercel.app/](https://gym-accessories-store-api.vercel.app/) *(or your deployed backend URL)*
+- **Customer Storefront**: [https://gym-accessories-store-ie4ncdj7u-praveen-kalansooriyas-projects.vercel.app/](https://gym-accessories-store-ie4ncdj7u-praveen-kalansooriyas-projects.vercel.app/)
+- **Admin Dashboard**: [https://gym-accessories-store-admin-hmkkwelyh.vercel.app/](https://gym-accessories-store-admin-hmkkwelyh.vercel.app/)
+- **Backend API**: [https://gym-accessories-store-api.vercel.app/](https://gym-accessories-store-api.vercel.app/)
 - **GitHub Repository**: [https://github.com/Praveenmkl/gym-accessories-store](https://github.com/Praveenmkl/gym-accessories-store)
 
 ---
 
-## 🛠️ 2. Tech Stack
+## 🔑 2. Default Admin Credentials
 
-- **Customer Frontend**: React 19, Vite, Tailwind CSS, Lucide Icons, React Icons, Axios, React Router v7
-- **Admin Dashboard**: React 19, Vite, Axios, React Router v7
-- **Backend API**: Node.js (ES Modules), Express 5, JSON Web Token (JWT), Bcrypt.js, CORS, Dotenv
-- **Database**: MongoDB Atlas & Mongoose 9 (Serverless Connection Pooling)
-- **Deployment**: Vercel (Frontend SPA, Admin SPA & Serverless Node.js API)
+- **Email**: `admin@gmail.com`
+- **Password**: `Admin@123`
+- **Portal**: [Admin Dashboard Login](https://gym-accessories-store-admin-hmkkwelyh.vercel.app/login)
 
 ---
 
-## ⚙️ 3. Setup Steps
+## 🛠️ 3. Tech Stack
+
+- **Frontend**: React 19, Vite, Tailwind CSS, Lucide Icons, React Icons, Axios, React Router v7
+- **Admin Dashboard**: React 19, Vite, Axios, React Router v7
+- **Backend**: Node.js, Express 5, JWT, Bcrypt.js, CORS, Dotenv
+- **Database**: MongoDB Atlas & Mongoose 9
+- **Deployment**: Vercel (Frontend, Admin & Serverless Backend API)
+
+---
+
+## ⚙️ 4. Setup Steps
 
 ### Prerequisites
-- **Node.js**: `v18+` or later
-- **MongoDB Atlas** database URI or local MongoDB instance
-
----
+- Node.js: `v18+`
+- MongoDB Atlas database URI
 
 ### 1. Clone & Install
-
 ```bash
 git clone https://github.com/Praveenmkl/gym-accessories-store.git
-cd "gym-accessories-store"
+cd gym-accessories-store
 ```
 
----
-
 ### 2. Backend Setup
-
 ```bash
 cd backend
 npm install
@@ -60,10 +62,7 @@ npm run dev
 # Server running at http://localhost:5000
 ```
 
----
-
-### 3. Customer Storefront Setup
-
+### 3. Frontend Setup
 In a new terminal:
 ```bash
 cd frontend
@@ -78,13 +77,10 @@ VITE_API_URL=http://localhost:5000/api
 Run frontend:
 ```bash
 npm run dev
-# Storefront running at http://localhost:5173
+# Running at http://localhost:5173
 ```
 
----
-
 ### 4. Admin Dashboard Setup
-
 In a new terminal:
 ```bash
 cd admin-dashboard
@@ -99,63 +95,46 @@ VITE_API_URL=http://localhost:5000/api
 Run admin dashboard:
 ```bash
 npm run dev
-# Admin dashboard running at http://localhost:5174
+# Running at http://localhost:5174
 ```
 
----
-
-### 5. Create Admin Account
-
-To create or promote an admin account for the Admin Dashboard:
-
+### 5. Create / Reset Admin Account
 ```bash
 cd backend
-npm run create-admin -- --email admin@example.com --password yourPassword123 --name "Admin"
+npm run create-admin -- --email admin@gmail.com --password Admin@123 --name "Admin"
 ```
 
 ---
 
-## 🧪 4. How to Test Each Feature
+## 🧪 5. How to Test Each Feature
 
-### 1. User Registration & Authentication
-1. Navigate to the storefront at `http://localhost:5173/register`.
-2. Register a new user account with Name, Email, and Password.
-3. Log in at `/login` and verify that the authentication token is stored and the Navbar reflects your logged-in state.
+### 1. Authentication & Roles (Customer vs. Admin)
+- Go to `/register` on the frontend and create a new customer account.
+- Log in at `/login` as customer: verify access to cart, checkout, and order history.
+- Go to `http://localhost:5174/login` on admin dashboard: log in with the admin credentials (`admin@gmail.com` / `Admin@123`).
+- Verify customer accounts cannot access the admin dashboard.
 
-### 2. Admin Authentication & Role Protection
-1. Run the admin creation command: `npm run create-admin -- --email admin@powerfit.com --password adminPass123 --name "Manager"`.
-2. Open the Admin Dashboard at `http://localhost:5174/login`.
-3. Log in with the admin credentials; verify you are redirected to the protected dashboard (`/`).
-4. Attempting to access the admin portal with regular customer credentials will be rejected.
+### 2. Product Catalog & Details
+- Go to `/products` on the customer storefront.
+- Browse items and click a product to open `/product/:id`.
+- Verify price, stock quantity, and description display correctly.
 
-### 3. Product Catalog & Details
-1. On the customer storefront (`/products`), browse the fitness equipment and accessories catalog.
-2. Click any product card to open its detail page (`/product/:id`).
-3. Verify product images, descriptions, price, and in-stock quantities are displayed accurately.
+### 3. Shopping Cart
+- Click **Add to Cart** from product details.
+- Go to `/cart`: increase/decrease quantities, remove items, and verify total price updates dynamically.
 
-### 4. Cart Management
-1. From the product detail page, select a quantity and click **Add to Cart**.
-2. Go to the Cart page (`/cart`).
-3. Adjust item quantities (`+` / `-`) or remove items; verify subtotal and grand total dynamically recalculate.
+### 4. Checkout & Order Placement
+- From `/cart`, click **Proceed to Checkout**.
+- Enter shipping details (Address, City, Postal Code, Phone).
+- Complete payment: verify redirect to `/success` and stock quantity decreases in database.
 
-### 5. Checkout & Shipping Details Flow
-1. From the Cart page, click **Proceed to Checkout** (redirects to `/checkout`).
-2. If not logged in, verify you are redirected to `/login` with an automatic return to checkout upon successful login.
-3. Fill in the shipping address details (Address, City, Postal Code, Phone Number) and submit the order.
+### 5. Order History & Tracking
+- Go to `/myorders` as a logged-in user.
+- Verify placed orders show item list, total amount, date, and current status (`Pending`/`Paid`).
+- Click **Cancel Order** to test order cancellation.
 
-### 6. Payment Processing & Order Placement
-1. In the checkout flow, process the simulated payment.
-2. Verify redirect to the Success page (`/success`) displaying confirmation details.
-3. Verify that product stock automatically decrements in the database.
-
-### 7. Order History & Cancellation
-1. Navigate to My Orders (`/myorders`).
-2. Verify your placed orders appear with their status (`Pending`, `Paid`, `Processing`, or `Delivered`), ordered items, price, and timestamp.
-3. Click **Cancel Order** on an eligible pending order and confirm its status changes to `Cancelled`.
-
-### 8. Admin Inventory & Product CRUD Management
-1. Go to the Admin Dashboard (`http://localhost:5174`).
-2. **Add Product**: Fill in Product Name, Price, Quantity (Stock), Image URL, and Description, then submit.
-3. **Edit Product**: Click Edit on any row in the products table, update price or stock count, and save changes.
-4. **Delete Product**: Click Delete to remove a discontinued item from the catalog.
-5. Verify updates reflect immediately on both the Admin table and the Customer Storefront.
+### 6. Admin Product & Inventory Management (CRUD)
+- Open Admin Dashboard (`http://localhost:5174`).
+- **Add Product**: Fill name, price, quantity (stock), image URL, description and save.
+- **Edit Product**: Click Edit to modify price or stock; verify changes reflect on customer storefront.
+- **Delete Product**: Delete a product and verify removal from catalog.
