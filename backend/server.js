@@ -73,8 +73,14 @@ app.use(async (req, res, next) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/auth", authRoutes);
+
 app.use("/api/products", productRoutes);
+app.use("/products", productRoutes);
+
 app.use("/api/orders", orderRoutes);
+app.use("/orders", orderRoutes);
+
 
 
 // Start local listener only when not running on Vercel
