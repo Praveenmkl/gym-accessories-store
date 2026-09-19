@@ -1,8 +1,25 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/admin",
+      "destination": "https://gym-accessories-store-admin.vercel.app/login"
+    },
+    {
+      "source": "/admin/",
+      "destination": "https://gym-accessories-store-admin.vercel.app/login"
+    },
+    {
+      "source": "/admin/:path*",
+      "destination": "https://gym-accessories-store-admin.vercel.app/:path*"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://gym-accessories-store-vbfj6w14j-praveen-kalansooriyas-projects.vercel.app/api/:path*"
+    },
+    {
+      "source": "/:path*",
+      "destination": "https://gym-accessories-store-vbfj6w14j-praveen-kalansooriyas-projects.vercel.app/:path*"
     }
   ]
-}
+}

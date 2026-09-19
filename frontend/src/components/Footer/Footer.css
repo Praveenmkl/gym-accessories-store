@@ -12,3 +12,23 @@
     border-color: #323232;
     margin-bottom: 20px;
 }
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.admin-link {
+    color: #888;
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s ease;
+}
+
+.admin-link:hover {
+    color: #e63946;
+    text-decoration: underline;
+}
